@@ -233,9 +233,9 @@ static int uid_cputime_show(struct seq_file *m, void *v)
 			calc_uid_cputime(uid_entry, &total_utime, &total_stime);
 			seq_printf(m, "%d: %llu %llu\n", uid_entry->uid,
 				ktime_to_us(total_utime), ktime_to_us(total_stime));
+			}
+			unlock_uid_by_bkt(bkt);
 		}
-		unlock_uid_by_bkt(bkt);
-	}
 
 	return 0;
 }
@@ -365,7 +365,6 @@ static void update_io_stats_uid(struct uid_entry *uid_entry)
 
 static int uid_io_show(struct seq_file *m, void *v)
 {
-
 	struct uid_entry *uid_entry = NULL;
 	u32 bkt;
 
@@ -488,9 +487,9 @@ static void update_stats_workfn(struct work_struct *work)
 
 		__add_uid_io_stats(uid_entry, &usw->ioac, UID_STATE_DEAD_TASKS);
 next:
-		unlock_uid(usw->uid);
-		kfree(usw);
-	}
+			unlock_uid(usw->uid);
+			kfree(usw);
+		}
 
 }
 static DECLARE_WORK(update_stats_work, update_stats_workfn);
@@ -545,6 +544,15 @@ exit:
 static struct notifier_block process_notifier_block = {
 	.notifier_call	= process_notifier,
 };
+
+static void init_hash_table_and_lock(void)
+{
+	int i;
+
+	hash_init(hash_table);
+	for (i = 0; i < UID_HASH_NUMS; i++)
+		spin_lock_init(&uid_lock[i]);
+}
 
 static int __init proc_uid_sys_stats_init(void)
 {
