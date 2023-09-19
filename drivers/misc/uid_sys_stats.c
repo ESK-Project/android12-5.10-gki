@@ -417,6 +417,9 @@ static ssize_t uid_procstat_write(struct file *file,
 	uid_t uid;
 	int argc, state;
 	char input[128];
+#ifndef CONFIG_UID_SYS_STATS_DEBUG
+	struct uid_entry uid_entry_tmp;
+#endif
 
 	if (count >= sizeof(input))
 		return -EINVAL;
