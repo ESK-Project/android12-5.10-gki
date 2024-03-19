@@ -548,15 +548,6 @@ static struct notifier_block process_notifier_block = {
 	.notifier_call	= process_notifier,
 };
 
-static void init_hash_table_and_lock(void)
-{
-	int i;
-
-	hash_init(hash_table);
-	for (i = 0; i < UID_HASH_NUMS; i++)
-		spin_lock_init(&uid_lock[i]);
-}
-
 static int __init proc_uid_sys_stats_init(void)
 {
 	init_hash_table_and_lock();
