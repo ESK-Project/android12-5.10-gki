@@ -781,20 +781,26 @@ KBUILD_CFLAGS += -Os
 endif
 
 ifdef CONFIG_LLVM_POLLY
-KBUILD_CFLAGS	+= -mllvm -polly \
-		   -mllvm -polly-run-inliner \
-		   -mllvm -polly-ast-use-context \
-		   -mllvm -polly-detect-keep-going \
-		   -mllvm -polly-invariant-load-hoisting \
-		   -mllvm -polly-vectorizer=stripmine
+ifeq ($(call cc-option-yn, -mllvm -polly),y)
 
-KBUILD_CFLAGS  += -mllvm -polly-loopfusion-greedy=1 \
-		   -mllvm -polly-reschedule=1 \
-		   -mllvm -polly-postopts=1 \
-		   -mllvm -polly-num-threads=0 \
-		   -mllvm -polly-omp-backend=LLVM \
-		   -mllvm -polly-scheduling=dynamic \
-		   -mllvm -polly-scheduling-chunksize=1
+KBUILD_CFLAGS += \
+        -mllvm -polly \
+        -mllvm -polly-reschedule=1 \
+        -mllvm -polly-postopts=1 \
+        -mllvm -polly-tiling \
+        -mllvm -polly-vectorizer=stripmine
+
+ifeq ($(call cc-option-yn, -mllvm -polly-omp-backend=LLVM),y)
+KBUILD_CFLAGS += \
+        -mllvm -polly-omp-backend=LLVM \
+        -mllvm -polly-num-threads=0 \
+        -mllvm -polly-scheduling=dynamic \
+        -mllvm -polly-scheduling-chunksize=1 \
+        -mllvm -polly-run-inliner \
+        -mllvm -polly-ast-use-context \
+        -mllvm -polly-detect-keep-going \
+        -mllvm -polly-invariant-load-hoisting \
+        -mllvm -polly-loopfusion-greedy=1
 
 # Polly may optimise loops with dead paths beyound what the linker
 # can understand. This may negate the effect of the linker's DCE
@@ -802,6 +808,9 @@ KBUILD_CFLAGS  += -mllvm -polly-loopfusion-greedy=1 \
 # in order to preserve the overall effect of the linker's DCE.
 ifdef CONFIG_LD_DEAD_CODE_DATA_ELIMINATION
 POLLY_FLAGS	+= -mllvm -polly-run-dce
+endif
+
+endif
 endif
 endif
 
