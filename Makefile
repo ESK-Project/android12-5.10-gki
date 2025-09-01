@@ -841,6 +841,20 @@ KBUILD_CFLAGS += $(stackp-flags-y)
 KBUILD_CFLAGS-$(CONFIG_WERROR) += -Werror
 KBUILD_CFLAGS += $(KBUILD_CFLAGS-y)
 
+ifeq ($(call cc-option-yn, -mllvm -regalloc-enable-advisor=release),y)
+ifeq ($(call cc-option-yn,-mllvm -ml-inliner-model-selector=arm64-mixed),y)
+KBUILD_CLFLAGS  += -mllvm -regalloc-enable-advisor=release \
+		   -mllvm -enable-ml-inliner=release \
+                   -mllvm -ml-inliner-model-selector=arm64-mixed \
+		   -ml-inliner-skip-policy=if-caller-not-cold
+KBUILD_LDFLAGS  += -mllvm -enable-ml-inliner=release \
+                   -mllvm -ml-inliner-model-selector=arm64-mixed
+endif
+endif
+
+# Enable hot cold split optimization
+KBUILD_CFLAGS   += -mllvm -hot-cold-split=true
+
 ifdef CONFIG_CC_IS_CLANG
 KBUILD_CPPFLAGS += -Qunused-arguments
 KBUILD_CFLAGS += -Wno-format-invalid-specifier
