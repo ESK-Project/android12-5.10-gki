@@ -232,6 +232,7 @@ bool task_is_booster(struct task_struct *tsk)
 	       !strcmp(comm, "mtkPowerService") ||
 	       !strncmp(comm, "system_perf_ini", 9);
 }
+EXPORT_SYMBOL_GPL(task_is_booster);
 
 static inline struct cpuset *css_cs(struct cgroup_subsys_state *css)
 {
