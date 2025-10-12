@@ -98,7 +98,7 @@ extern "C" {
 #elif defined(LZ4_DLL_IMPORT) && (LZ4_DLL_IMPORT == 1)
 #define LZ4LIB_API                                                             \
 	__declspec(dllimport)                                                  \
-		LZ4LIB_VISIBILITY /* It isn't required but allows to generate better code, saving a function pointer load from the IAT and an indirect jump.*/
+	LZ4LIB_VISIBILITY /* It isn't required but allows to generate better code, saving a function pointer load from the IAT and an indirect jump.*/
 #else
 #define LZ4LIB_API LZ4LIB_VISIBILITY
 #endif
@@ -275,7 +275,8 @@ LZ4LIB_API int LZ4_compressBound(int inputSize);
     Values > LZ4_ACCELERATION_MAX will be replaced by LZ4_ACCELERATION_MAX (currently == 65537, see lz4.c).
 */
 LZ4LIB_API int LZ4_compress_fast(const char *src, char *dst, int srcSize,
-				 int dstCapacity, int acceleration, void *wrkmem);
+				 int dstCapacity, int acceleration,
+				 void *wrkmem);
 
 /*! LZ4_compress_fast_extState() :
  *  Same as LZ4_compress_fast(), using an externally allocated memory space for its state.

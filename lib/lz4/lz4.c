@@ -110,15 +110,20 @@
 #if defined(_MSC_VER) && (_MSC_VER >= 1400) /* Visual Studio 2005+ */
 #include <intrin.h> /* only present in VS2005+ */
 #pragma warning(                                                               \
-	disable : 4127) /* disable: C4127: conditional expression is constant */
+	disable                                                                \
+	: 4127) /* disable: C4127: conditional expression is constant */
 #pragma warning(                                                               \
-	disable : 6237) /* disable: C6237: conditional expression is always 0 */
+	disable                                                                \
+	: 6237) /* disable: C6237: conditional expression is always 0 */
 #pragma warning(                                                               \
-	disable : 6239) /* disable: C6239: (<non-zero constant> && <expression>) always evaluates to the result of <expression> */
+	disable                                                                \
+	: 6239) /* disable: C6239: (<non-zero constant> && <expression>) always evaluates to the result of <expression> */
 #pragma warning(                                                               \
-	disable : 6240) /* disable: C6240: (<expression> && <non-zero constant>) always evaluates to the result of <expression> */
+	disable                                                                \
+	: 6240) /* disable: C6240: (<expression> && <non-zero constant>) always evaluates to the result of <expression> */
 #pragma warning(                                                               \
-	disable : 6326) /* disable: C6326: Potential comparison of a constant with another constant */
+	disable                                                                \
+	: 6326) /* disable: C6326: Potential comparison of a constant with another constant */
 #endif /* _MSC_VER */
 
 #ifndef LZ4_FORCE_INLINE
@@ -515,8 +520,8 @@ LZ4_FORCE_INLINE void LZ4_memcpy_using_offset(BYTE *dstPtr, const BYTE *srcPtr,
 		LZ4_memcpy(&v[2], srcPtr, 2);
 #if defined(_MSC_VER) && (_MSC_VER <= 1937) /* MSVC 2022 ver 17.7 or earlier */
 #pragma warning(push)
-#pragma warning(                                                               \
-	disable : 6385) /* warning C6385: Reading invalid data from 'v'. */
+#pragma warning(disable                                                        \
+		: 6385) /* warning C6385: Reading invalid data from 'v'. */
 #endif
 		LZ4_memcpy(&v[4], v, 4);
 #if defined(_MSC_VER) && (_MSC_VER <= 1937) /* MSVC 2022 ver 17.7 or earlier */
@@ -1704,7 +1709,8 @@ int LZ4_compress_fast_extState_fastReset(void *state, const char *src,
 int LZ4_compress_fast(const char *src, char *dest, int srcSize, int dstCapacity,
 		      int acceleration, void *wrkmem)
 {
-    return LZ4_compress_fast_extState(wrkmem, src, dest, srcSize, dstCapacity, acceleration);
+	return LZ4_compress_fast_extState(wrkmem, src, dest, srcSize,
+					  dstCapacity, acceleration);
 }
 EXPORT_SYMBOL(LZ4_compress_fast);
 
