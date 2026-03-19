@@ -3567,6 +3567,9 @@ static char *custom_module_blacklist[] = {
 #if IS_BUILTIN(CONFIG_ZSMALLOC)
     "zsmalloc",
 #endif
+#if IS_BUILTIN(CONFIG_MQ_IOSCHED_ADIOS)
+    "adios",
+#endif
 #ifdef CONFIG_MACH_XIAOMI_MARBLE
     /* Not required */
     "qca6750", "icnss2", "cs35l41_dlkm", "cs35l43_dlkm", "atmel_mxt_ts", "focaltech_fts", "nt36xxx_i2c", "nt36xxx_spi", "synaptics_dsx",
